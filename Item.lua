@@ -7,6 +7,39 @@ local ItemSearch = LibStub("LibItemSearch-Inventorian-1.0")
 local Item = CreateFrame("Button")
 local Item_MT = {__index = Item}
 
+-- Equipment set cache: itemID -> set name (for cached/offline characters)
+local equipSetCache = {}
+local function BuildEquipSetCache()
+	wipe(equipSetCache)
+	if not C_EquipmentSet then return end
+	local setIDs = C_EquipmentSet.GetEquipmentSetIDs()
+	if not setIDs then return end
+	for _, setID in ipairs(setIDs) do
+		local setName = C_EquipmentSet.GetEquipmentSetInfo(setID)
+		if setName then
+			local itemIDs = C_EquipmentSet.GetItemIDs(setID)
+			if itemIDs then
+				for _, itemID in ipairs(itemIDs) do
+					if itemID and itemID > 0 and not equipSetCache[itemID] then
+						equipSetCache[itemID] = setName
+					end
+				end
+			end
+		end
+	end
+end
+
+do
+	local f = CreateFrame("Frame")
+	f:SetScript("OnEvent", function(_, event)
+		if event == "PLAYER_LOGIN" or event == "EQUIPMENT_SETS_CHANGED" then
+			BuildEquipSetCache()
+		end
+	end)
+	f:RegisterEvent("PLAYER_LOGIN")
+	f:RegisterEvent("EQUIPMENT_SETS_CHANGED")
+end
+
 Inventorian.Item = {}
 Inventorian.Item.prototype = Item
 Inventorian.Item.count = 0
@@ -50,6 +83,18 @@ function Inventorian.Item:WrapItemButton(item)
 	item.searchOverlay:ClearAllPoints()
 	item.searchOverlay:SetSize(39, 39)
 	item.searchOverlay:SetPoint("CENTER")
+
+	-- equipment set name text (top-left)
+	item.SetText = item:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+	item.SetText:SetPoint("TOPLEFT", 1, -1)
+	item.SetText:SetJustifyH("LEFT")
+	item.SetText:SetJustifyV("TOP")
+	item.SetText:SetTextColor(1, 1, 1, 1)
+	local font, size = item.SetText:GetFont()
+	item.SetText:SetFont(font, size - 1, "OUTLINE")
+	item.SetText:SetWidth(35)
+	item.SetText:SetWordWrap(false)
+	item.SetText:Hide()
 
 	return item
 end
@@ -117,6 +162,7 @@ function Item:Update()
 	self:UpdateCooldown()
 	self:UpdateBorder(quality, itemID, noValue)
 	self:UpdateSearch(self.container.searchText)
+	self:UpdateSetText()
 
 	if GameTooltip:IsOwned(self) then
 		if not self:GetItem() then
@@ -249,6 +295,32 @@ function Item:Highlight(enable)
 		self:LockHighlight()
 	else
 		self:UnlockHighlight()
+	end
+end
+
+function Item:UpdateSetText()
+	if self:IsCached() then
+		local link = self:GetItem()
+		if not link then
+			self.SetText:Hide()
+			return
+		end
+		local itemID = tonumber(link:match("item:(%-?%d+)"))
+		if itemID and equipSetCache[itemID] then
+			self.SetText:SetText(equipSetCache[itemID])
+			self.SetText:Show()
+		else
+			self.SetText:Hide()
+		end
+	else
+		local _, equipSetNames = GetContainerItemEquipmentSetInfo(self.bag, self.slot)
+		if equipSetNames and equipSetNames ~= "" then
+			local name = strsplit(", ", equipSetNames)
+			self.SetText:SetText(name)
+			self.SetText:Show()
+		else
+			self.SetText:Hide()
+		end
 	end
 end
 
