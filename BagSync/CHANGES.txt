@@ -1,0 +1,10 @@
+tag 3803c215f9f271e397d292ae018c885535c0fe87 v10.9
+Author:	Xruptor <xruptor@manaflux.com>
+Date:	Mon Nov 14 12:24:17 2016 -0500
+
+commit c70c631b916919b3aa5c3e032026e31237c11f23
+Author: Xruptor <xruptor@manaflux.com>
+Date:   Fri Oct 28 17:00:12 2016 -0400
+
+    Added option to disable the BagSync version information at login.
+
