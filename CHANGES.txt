@@ -1,0 +1,30 @@
+tag 5a2f82c89351f65548b4682df2296394df61b4c3 7.3.0.0
+Author:	Hendrik Leppkes <h.leppkes@gmail.com>
+Date:	Wed Aug 30 08:39:51 2017 +0200
+
+Tag as 7.3.0.0
+
+commit 19ce607cd5f1a071323759a739f482a69eab4c1a
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Wed Aug 30 08:39:40 2017 +0200
+
+    Update TOC for 7.3
+
+commit bc93506443313dd668c87d0cdabcf1ba1f465c00
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Wed Aug 30 08:39:23 2017 +0200
+
+    Remove PlaySound compatibility
+
+commit 750c64b46fdcfa76da17c0b3567fc7f8560f35aa
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Fri Aug 4 12:55:48 2017 +0200
+
+    Try to work around an issue with container anchor update causing Lua errors
+
+commit bc7f843ea6e9ddae5a356f3edcf3271abb215031
+Author: Hendrik Leppkes <h.leppkes@gmail.com>
+Date:   Fri Aug 4 12:46:57 2017 +0200
+
+    Remove errant semicolon
+
