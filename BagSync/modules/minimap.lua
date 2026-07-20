@@ -2,13 +2,14 @@
 local BSYC = select(2, ...) --grab the addon namespace
 local L = LibStub("AceLocale-3.0"):GetLocale("BagSync", true)
 
-local bgMinimapButton = CreateFrame("Frame","BagSync_MinimapButton", Minimap)
+local bgMinimapButton = CreateFrame("Button","BagSync_MinimapButton", Minimap)
 
 bgMinimapButton:SetHeight(32)
 bgMinimapButton:SetWidth(32)
 bgMinimapButton:SetMovable(1)
 bgMinimapButton:SetUserPlaced(1)
 bgMinimapButton:EnableMouse(1)
+bgMinimapButton:RegisterForClicks('AnyUp')
 bgMinimapButton:RegisterForDrag('LeftButton')
 bgMinimapButton:SetFrameStrata('MEDIUM')
 bgMinimapButton:SetPoint('CENTER', Minimap:GetWidth()/3*-0.9, Minimap:GetHeight()/2*-1);
