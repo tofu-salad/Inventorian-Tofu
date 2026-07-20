@@ -71,7 +71,7 @@ bgsMinimapDD.initialize = function(self, level)
 
 end
 	
-bgMinimapButton:SetScript('OnMouseUp', function(self, button)
+bgMinimapButton:SetScript('OnClick', function(self, button)
 	if button == 'LeftButton' then
 		BSYC:GetModule("Search").frame:Show()
 	elseif button == 'RightButton' then
